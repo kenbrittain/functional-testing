@@ -7,7 +7,12 @@ namespace FunctionalTesting;
 public interface IRunner
 {
     /// <summary>
-    /// Returns the number of lines indexed from the console.
+    /// Returns the number of error output lines of text.
+    /// </summary>
+    public int Errors { get; }
+    
+    /// <summary>
+    /// Returns the number of standard output lines of text.
     /// </summary>
     public int Lines { get; }
     
