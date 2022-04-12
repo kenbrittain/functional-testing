@@ -31,11 +31,16 @@ public class ExecutableRunnerTests
     }
     
     [Fact]
-    public void Run_NoArgs_ReturnsSuccess()
+    public void LS_NoArgs_ReturnsSuccess()
     {
         // Arrange
+        var ls = new ExecutableRunner("ls");
+        
         // Act
+        ls.Run();
+        
         // Assert
+        Assert.Equal(0, ls.ExitCode);
     }
 
     /*
