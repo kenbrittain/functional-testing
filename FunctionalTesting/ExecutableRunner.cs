@@ -112,11 +112,16 @@ public class ExecutableRunner : IRunner
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
 
-            //var timeoutMillis = timeoutSeconds * 1000;
-            var timeoutMillis = -1;
+            var timeoutMillis = timeoutSeconds * 1000;
             var exited = p.WaitForExit(timeoutMillis);
-            if (exited == false)
+            if (exited)
             {
+                // Call to get output events per the docs
+                p.WaitForExit();
+            }
+            else
+            {
+                // program run timed out
                 p.Kill();
                 throw new Exception("Did not exit");
             }
