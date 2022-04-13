@@ -1,47 +1,86 @@
 ﻿using System.Diagnostics;
-using System.Text;
 
 namespace FunctionalTesting;
 
 /// <summary>
-/// 
+/// This class runs a program and captures the standard output and error. The
+/// output can be accessed and used for testing the program expectations.
 /// </summary>
 public class ExecutableRunner : IRunner
 {
-    private string _command;
-    private List<string> _output;
-    private List<string> _errors;
+    /// <summary>
+    /// Program to run (absolute or relative) 
+    /// </summary>
+    private readonly string _program;
+    
+    /// <summary>
+    /// Standard output text.
+    /// </summary>
+    private readonly List<string> _output;
+    
+    /// <summary>
+    /// Standard error text.
+    /// </summary>
+    private readonly List<string> _errors;
+    
+    // Returned program exit code
     private int _exitCode;
 
-    public ExecutableRunner(string command)
+    public ExecutableRunner(string program)
     {
-        _command = command ?? throw new ArgumentNullException(nameof(command));
+        _program = program ?? throw new ArgumentNullException(nameof(program));
         _output = new List<string>();
         _errors = new List<string>();
         _exitCode = 0;
     }
 
+    /// <summary>
+    /// The OS exit code from the program.
+    /// </summary>
     public int ExitCode => _exitCode;
     
+    /// <summary>
+    /// Number of standard output lines indexed.
+    /// </summary>
     public int Lines => _output.Count;
 
+    /// <summary>
+    /// Number of standard error line indexed.
+    /// </summary>
     public int Errors => _errors.Count;
 
+    /// <summary>
+    /// Get the specified line of standard error text.
+    /// </summary>
+    /// <param name="index">The zero-based index of the text to get.</param>
+    /// <returns>The error text at the index location.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The index is less than zero or greater than <see cref="Errors"/></exception>
     public string GetError(int index) => _errors[index];
 
+    /// <summary>
+    /// Get the specified line of standard output text.
+    /// </summary>
+    /// <param name="index">The zero-based index of the text to get.</param>
+    /// <returns>The error text at the index location.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The index is less than zero or greater than <see cref="Errors"/></exception>
     public string GetLine(int index) => _output[index];
 
     /// <summary>
-    /// Run the command with no arguments and wait indefinitely,
+    /// Run the program with no arguments and wait indefinitely,
     /// </summary>
-    /// <returns>The exit code from the command.</returns>
+    /// <returns>The exit code from the program.</returns>
     public int Run()
     {
         var n = Run(Array.Empty<string>(), -1);
         return n;
     }
     
-    
+    /// <summary>
+    /// Run the program with the specified arguments.
+    /// </summary>
+    /// <param name="args">Arguments used to run the program.</param>
+    /// <param name="timeoutSeconds">Timeout in seconds.</param>
+    /// <returns>OS exit code from the program.</returns>
     public int Run(string[] args, int timeoutSeconds)
     {
         _output.Clear();
@@ -58,8 +97,8 @@ public class ExecutableRunner : IRunner
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardOutput = true;
         
-        // Add in the args before we run the command.
-        p.StartInfo.FileName = _command;
+        // Add in the args before we run the program.
+        p.StartInfo.FileName = _program;
         foreach (var arg in args)
         {
             p.StartInfo.ArgumentList.Add(arg);
