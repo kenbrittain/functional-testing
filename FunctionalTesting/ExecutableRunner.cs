@@ -23,16 +23,31 @@ public class ExecutableRunner : IRunner
     /// </summary>
     private readonly List<string> _errors;
     
-    // Returned program exit code
+    /// <summary>
+    /// Returned program exit code. Default is -1 for errors and timeout.
+    /// </summary>
     private int _exitCode;
+
+    /// <summary>
+    /// Program args used for the run.
+    /// </summary>
+    private IEnumerable<string> _args;
 
     public ExecutableRunner(string program)
     {
         _program = program ?? throw new ArgumentNullException(nameof(program));
+        
         _output = new List<string>();
         _errors = new List<string>();
-        _exitCode = 0;
+        
+        _exitCode = -1;
+        _args = Enumerable.Empty<string>();
     }
+
+    /// <summary>
+    /// Returns the arguments used for the run.
+    /// </summary>
+    public IEnumerable<string> Args => _args;
 
     /// <summary>
     /// The OS exit code from the program.
@@ -48,6 +63,11 @@ public class ExecutableRunner : IRunner
     /// Number of standard error line indexed.
     /// </summary>
     public int Errors => _errors.Count;
+
+    /// <summary>
+    /// Returns the program.
+    /// </summary>
+    public string Program => _program;
 
     /// <summary>
     /// Get the specified line of standard error text.
@@ -71,7 +91,7 @@ public class ExecutableRunner : IRunner
     /// <returns>The exit code from the program.</returns>
     public int Run()
     {
-        var n = Run(Array.Empty<string>(), -1);
+        var n = Run(Enumerable.Empty<string>(), -1);
         return n;
     }
     
@@ -81,8 +101,10 @@ public class ExecutableRunner : IRunner
     /// <param name="args">Arguments used to run the program.</param>
     /// <param name="timeoutSeconds">Timeout in seconds.</param>
     /// <returns>OS exit code from the program.</returns>
-    public int Run(string[] args, int timeoutSeconds)
+    public int Run(IEnumerable<string> args, int timeoutSeconds)
     {
+        _args = args;
+        
         _output.Clear();
         _errors.Clear();
         

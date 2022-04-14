@@ -7,9 +7,21 @@ namespace FunctionalTesting;
 public interface IRunner
 {
     /// <summary>
+    /// The arguments passed to the program when run. This can be an empty if
+    /// no arguments were given. 
+    /// </summary>
+    public IEnumerable<string> Args { get; }
+    
+    /// <summary>
     /// Returns the number of error output lines of text.
     /// </summary>
     public int Errors { get; }
+    
+    /// <summary>
+    /// The program exit code. This will be -1 if the run was timed out and
+    /// the program was killed.
+    /// </summary>
+    public int ExitCode { get; }
     
     /// <summary>
     /// Returns the number of standard output lines of text.
@@ -17,11 +29,24 @@ public interface IRunner
     public int Lines { get; }
     
     /// <summary>
+    /// The program command line that was executed.
+    /// </summary>
+    public string Program { get; }
+
+    /// <summary>
+    /// Gets the indexed text from the error output.
+    /// </summary>
+    /// <param name="line">The line of text to get.</param>
+    /// <returns>The line of text from the output.</returns>
+    /// <exception cref="IndexOutOfRangeException">The index is less than zero or greater than <see cref="Errors"/>.</exception>
+    string GetError(int line);
+    
+    /// <summary>
     /// Gets the indexed text from the console output.
     /// </summary>
-    /// <param name="index">The line to get.</param>
+    /// <param name="index">The line of text to get.</param>
     /// <returns>The line of text from the output.</returns>
-    /// <exception cref="IndexOutOfRangeException">The requested index does not exist in the output.</exception>
+    /// <exception cref="IndexOutOfRangeException">The index is less than zero or greater than <see cref="Lines"/>.</exception>
     string GetLine(int index);
 
     /// <summary>
@@ -30,5 +55,5 @@ public interface IRunner
     /// <param name="args">Command line arguments.</param>
     /// <para name="timeout">Seconds before timeout when running.</para>
     /// <returns>Returns the exit code from the program run.</returns>
-    int Run(string[] args, int timeout);
+    int Run(IEnumerable<string> args, int timeout);
 }
