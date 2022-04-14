@@ -30,7 +30,7 @@ public class ExecutableRunnerTests
         Assert.Throws<ArgumentOutOfRangeException>(() => runner.GetLine(999));
     }
     
-    [Fact]
+    [Fact(Skip = "Use for testing ExecutableRunner only")]
     public void LS_NoArgs_ReturnsSuccess()
     {
         // Arrange
