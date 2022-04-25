@@ -10,7 +10,7 @@ public interface IRunner
     /// The arguments passed to the program when run. This can be an empty if
     /// no arguments were given. 
     /// </summary>
-    public IEnumerable<string> Args { get; }
+    IEnumerable<string> Args { get; }
     
     /// <summary>
     /// Returns the number of error output lines of text.
@@ -21,17 +21,17 @@ public interface IRunner
     /// The program exit code. This will be -1 if the run was timed out and
     /// the program was killed.
     /// </summary>
-    public int ExitCode { get; }
+    int ExitCode { get; }
     
     /// <summary>
     /// Returns the number of standard output lines of text.
     /// </summary>
-    public int Lines { get; }
+    int Lines { get; }
     
     /// <summary>
     /// The program command line that was executed.
     /// </summary>
-    public string Program { get; }
+    string Program { get; }
 
     /// <summary>
     /// Enumerate over all of the error lines of text.
