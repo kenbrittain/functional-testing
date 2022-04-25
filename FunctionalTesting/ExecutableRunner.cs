@@ -70,6 +70,16 @@ public class ExecutableRunner : IRunner
     public string Program => _program;
 
     /// <summary>
+    /// Enumerate over all of the error lines of text.
+    /// </summary>
+    public IEnumerable<string> AllErrors => _errors;
+
+    /// <summary>
+    /// Enumerate the output lines of text.
+    /// </summary>
+    public IEnumerable<string> AllLines => _output;
+
+    /// <summary>
     /// Get the specified line of standard error text.
     /// </summary>
     /// <param name="index">The zero-based index of the text to get.</param>

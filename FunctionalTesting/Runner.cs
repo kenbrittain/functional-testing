@@ -34,6 +34,16 @@ public interface IRunner
     public string Program { get; }
 
     /// <summary>
+    /// Enumerate over all of the error lines of text.
+    /// </summary>
+    IEnumerable<string> AllErrors { get;  }
+
+    /// <summary>
+    /// Enumerate the output lines of text.
+    /// </summary>
+    IEnumerable<string> AllLines { get; }
+
+    /// <summary>
     /// Gets the indexed text from the error output.
     /// </summary>
     /// <param name="line">The line of text to get.</param>
@@ -48,7 +58,7 @@ public interface IRunner
     /// <returns>The line of text from the output.</returns>
     /// <exception cref="IndexOutOfRangeException">The index is less than zero or greater than <see cref="Lines"/>.</exception>
     string GetLine(int index);
-
+    
     /// <summary>
     /// Run the system under test and indexes the console output.
     /// </summary>
